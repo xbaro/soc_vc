@@ -35,6 +35,9 @@ RUN luarocks install nn && \
         cd iTorch && \
         luarocks make
 
+# Install pandoc
+RUN pip install pandoc
+
 # Add supervisor S6
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz /tmp/
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C /
