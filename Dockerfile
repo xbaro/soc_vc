@@ -8,7 +8,7 @@ RUN pip install jupyter-tensorboard && jupyter nbextension install --py jupyter_
 RUN pip install autopep8
 
 # Install missing dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -yq \
                 libzmq3-dev \
                 libssl-dev \
                 python-zmq \
@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y \
         rm -rf /var/lib/apt/lists/*
 
 # Install xelatex to download as PDF the notebooks
-RUN add-apt-repository universe && apt-get update && apt-get install -y \
+RUN add-apt-repository universe && apt-get update && apt-get install -yq \
                 pandoc \
                 texlive-xetex \
         && \
