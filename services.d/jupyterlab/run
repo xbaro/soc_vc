@@ -1,0 +1,2 @@
+#!/usr/bin/execlineb -P
+/usr/local/bin/jupyter lab --port=9999 --no-browser --ip=0.0.0.0  --allow-root --notebook-dir=/data

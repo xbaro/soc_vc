@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -yq \
                 libssl-dev \
                 python-zmq \
                 unzip \
+                curl \
+                git \
         && \
         apt-get clean && \
         apt-get autoremove && \
@@ -22,6 +24,7 @@ RUN apt-get update && apt-get install -yq \
 RUN add-apt-repository universe && apt-get update && apt-get install -yq \
                 pandoc \
                 texlive-xetex \
+                texlive-generic-extra \
         && \
         apt-get clean && \
         apt-get autoremove && \
@@ -35,8 +38,28 @@ RUN luarocks install nn && \
         cd iTorch && \
         luarocks make
 
-# Install pandoc
-RUN pip install pandoc
+# Install Jupyter Lab
+RUN pip install jupyter jupyterlab notebook pandoc nbconvert --upgrade
+
+# Install NodeJS
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+		apt-get install -y \
+		nodejs \		
+	&& \
+        apt-get clean && \
+        apt-get autoremove && \
+        rm -rf /var/lib/apt/lists/*
+
+# Install Jupyterlab git extension
+RUN jupyter labextension install @jupyterlab/git && \
+	pip install --upgrade jupyterlab-git && \
+	jupyter serverextension enable --py jupyterlab_git
+
+# Install nbdim extension
+RUN jupyter serverextension enable --py nbdime && \
+	jupyter nbextension install --py nbdime && \
+	jupyter nbextension enable --py nbdime && \
+        jupyter labextension install nbdime-jupyterlab
 
 # Add supervisor S6
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz /tmp/
@@ -49,5 +72,6 @@ RUN tar xzf /tmp/socklog-overlay-amd64.tar.gz -C /
 # Add service definition files to start Notebooks and TensorBoar
 ADD services.d/notebooks /etc/services.d/notebooks
 ADD services.d/tensorboard /etc/services.d/tensorboard
+ADD services.d/jupyterlab /etc/services.d/jupyterlab
 
 ENTRYPOINT ["/init"]

@@ -1,0 +1,26 @@
+version: '3'
+services:
+  web:
+    #build: .
+    image: xbaro/soc_vc
+    restart: always
+    ports:
+      - "36006:6006"
+      - "38888:8888"
+      - "39999:9999"
+    volumes:
+      - soc_data:/data
+      - ./config/jupyter_notebook_config.py:/root/.jupyter/jupyter_notebook_config.py:rw  
+    networks:
+      - front-tier
+
+networks:
+  front-tier:
+    driver: bridge
+
+volumes:
+  soc_data:
+    driver_opts:
+      type: none
+      device: $PWD/_data/data
+      o: bind
