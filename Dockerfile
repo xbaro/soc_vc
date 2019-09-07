@@ -51,7 +51,15 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
         rm -rf /var/lib/apt/lists/*
 
 # Upgrade pandoc
-RUN pip upgrade pandoc libpython3.6-dev
+RUN apt-get update && \
+	apt-get upgrade -y \
+		pandoc \
+		pandoc-citeproc \
+		pandoc-data \
+        && \
+        apt-get clean && \
+        apt-get autoremove && \
+        rm -rf /var/lib/apt/lists/*
 
 # Install Jupyterlab git extension
 RUN jupyter labextension install @jupyterlab/git && \
