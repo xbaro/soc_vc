@@ -50,6 +50,9 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
         apt-get autoremove && \
         rm -rf /var/lib/apt/lists/*
 
+# Upgrade pandoc
+RUN pip upgrade pandoc libpython3.6-dev
+
 # Install Jupyterlab git extension
 RUN jupyter labextension install @jupyterlab/git && \
 	pip install --upgrade jupyterlab-git && \
@@ -59,7 +62,10 @@ RUN jupyter labextension install @jupyterlab/git && \
 RUN jupyter serverextension enable --py nbdime && \
 	jupyter nbextension install --py nbdime && \
 	jupyter nbextension enable --py nbdime && \
-        jupyter labextension install nbdime-jupyterlab
+        jupyter labextension install nbdime-jupyterlab 
+
+# Install toc extension
+RUN jupyter labextension install @jupyterlab/toc
 
 # Add supervisor S6
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz /tmp/
