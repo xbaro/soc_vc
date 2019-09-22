@@ -38,8 +38,8 @@ RUN luarocks install nn && \
 RUN pip install jupyter jupyterlab notebook --upgrade
 
 # Install Jupyterlab tensorboard extension
-RUN pip install jupyter_contrib_nbextensions && \
-	jupyter contrib nbextension install
+#RUN pip install jupyter_contrib_nbextensions && \
+#	jupyter contrib nbextension install
 RUN pip install jupyter-tensorboard && \
 	jupyter nbextension install --py jupyter_tensorboard
 
@@ -81,7 +81,7 @@ RUN tar xzf /tmp/socklog-overlay-amd64.tar.gz -C /
 
 # Add service definition files to start Notebooks and TensorBoar
 ADD services.d/notebooks /etc/services.d/notebooks
-ADD services.d/tensorboard /etc/services.d/tensorboard
+#ADD services.d/tensorboard /etc/services.d/tensorboard
 ADD services.d/jupyterlab /etc/services.d/jupyterlab
 
 ENTRYPOINT ["/init"]
