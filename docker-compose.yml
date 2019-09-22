@@ -1,18 +1,43 @@
 version: '3'
 services:
-  web:
-    #build: .
-    image: xbaro/soc_vc
+  traefik:
+    image: traefik
     restart: always
     ports:
-      - "36006:6006"
-      - "38888:8888"
-      - "39999:9999"
+      - "80:80"
+      - "443:443"
+#      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/traefik.toml:/traefik.toml
+      - ./_data/acme.json:/acme.json
+    depends_on:
+      - web
+    networks:
+      - front-tier
+  web:
+    #build: .
+    image: xbaro/soc_vc:v2
+    restart: always
+#    ports:
+#      - "36006:6006"
+#      - "38888:8888"
+#      - "39999:9999"
     volumes:
       - soc_data:/data
       - ./config/jupyter_notebook_config.py:/root/.jupyter/jupyter_notebook_config.py:rw  
     networks:
       - front-tier
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=web"
+      - "traefik.docker.network=soc_vc_front-end"
+      - "traefik.protocol=http"
+      - "traefik.frontend.entryPoints=https"
+      - "traefik.frontend.rule=Host:soc.xbaro.eu"
+      - "traefik.frontend.passHostHeader=true"
+      - "traefik.frontend.whiteList.useXForwardedFor=true"
+      - "traefik.port=9999"
 
 networks:
   front-tier:
