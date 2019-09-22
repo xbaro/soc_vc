@@ -3,13 +3,6 @@ FROM ufoym/deepo:all-py36-jupyter-cpu
 # Upgrade PIP
 RUN pip install --upgrade pip
 
-# Install additional packages
-#RUN pip install --upgrade pip
-#RUN pip install ipyparallel && jupyter nbextension install --py ipyparallel && jupyter nbextension enable --py ipyparallel && jupyter serverextension enable --py ipyparallel
-#RUN pip install jupyter_contrib_nbextensions && jupyter contrib nbextension install
-#RUN pip install jupyter-tensorboard && jupyter nbextension install --py jupyter_tensorboard
-#RUN pip install autopep8
-
 # Install missing dependencies
 RUN apt-get update && apt-get install -yq \
                 libzmq3-dev \
@@ -23,27 +16,6 @@ RUN apt-get update && apt-get install -yq \
         apt-get autoremove && \
         rm -rf /var/lib/apt/lists/*
 
-# Install xelatex to download as PDF the notebooks
-#RUN add-apt-repository universe && apt-get update && apt-get install -yq \
-#                pandoc \
-#                texlive-xetex \
-#                texlive-generic-extra \
-#        && \
-#        apt-get clean && \
-#        apt-get autoremove && \
-#        rm -rf /var/lib/apt/lists/*
-
-# Install the latest versions of nn, and iTorch
-RUN luarocks install nn && \
-    luarocks install loadcaffe && \
-        \
-        cd /root && git clone https://github.com/facebook/iTorch.git && \
-        cd iTorch && \
-        luarocks make
-
-# Install Jupyter Lab
-#RUN pip install jupyter jupyterlab notebook pandoc nbconvert --upgrade
-#RUN pip install jupyter jupyterlab notebook --upgrade
 
 # Install NodeJS
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
@@ -54,17 +26,13 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
         apt-get autoremove && \
         rm -rf /var/lib/apt/lists/*
 
-# Upgrade pandoc
-#RUN apt-get update && \
-#	apt-get upgrade -y \
-#		pandoc \
-#		pandoc-citeproc \
-#		pandoc-data \
-#        && \
-#        apt-get clean && \
-#        apt-get autoremove && \
-#        rm -rf /var/lib/apt/lists/*
-
+# Install the latest versions of nn, and iTorch
+RUN luarocks install nn && \
+    luarocks install loadcaffe && \
+        \
+        cd /root && git clone https://github.com/facebook/iTorch.git && \
+        cd iTorch && \
+        luarocks make
 
 # Install Jupyter Lab and upgrade notebook
 RUN pip install jupyter jupyterlab notebook --upgrade
