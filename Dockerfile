@@ -71,6 +71,9 @@ RUN pip install ipywidgets chart-studio parquet fastparquet && \
 	jupyter nbextension enable --py widgetsnbextension && \
 	jupyter labextension install @jupyter-widgets/jupyterlab-manager
 
+# Upgrade pyTorch
+RUN pip3 install torch==1.3.0+cpu torchvision==0.4.1+cpu -f https://download.pytorch.org/whl/torch_stable.html --upgrade
+
 # Add supervisor S6
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz /tmp/
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C /
