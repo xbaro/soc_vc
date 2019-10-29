@@ -74,6 +74,9 @@ RUN pip install ipywidgets chart-studio parquet fastparquet && \
 # Install additional packages
 RUN pip install tqdm stldecompose
 
+# Upgrade pyTorch
+RUN pip3 install torch torchvision --upgrade
+
 # Add supervisor S6
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz /tmp/
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C /
